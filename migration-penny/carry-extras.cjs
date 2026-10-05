@@ -43,3 +43,52 @@ for (const sc of snap.behavior.nodes.filter((n) => n.type === "complex-scenario"
 }
 fs.writeFileSync("snapshot.json", JSON.stringify(snap));
 console.log(log.join("\n"));
+
+// ── v1 terminal semantics (build 2) ─────────────────────────────────────────
+// Evidence (build 1 engine traces, sims 01/16): a flow exit had no compiled outgoing route, so every finished call
+// fell back to the hub, which waited for a caller turn before hanging up (repeated "Goodbye"s). v1 End Call nodes
+// speak their line and hang up immediately. Re-represent that:
+//  5. v1 End Call steps: speak their verbatim prompt without waiting (skipUserResponse), exit edge forced (alwaysPick)
+//  6. explicit root routes: each scenario that can exit -> the matching root end-call (forced); hub -> both end-calls
+//     (authored hub routes, since an authored incoming edge removes an end-call's generated hub entry)
+//  7. v1 "Wait for Response" node -> native v2 waitForResponse step (same prompt-step fields)
+{
+  const snap2 = JSON.parse(fs.readFileSync("snapshot.json", "utf8"));
+  const v1Type = new Map(src.nodes.filter((n) => n.type).map((n) => [n.data.name, n.type]));
+  const out = [];
+  for (const sc of snap2.behavior.nodes.filter((n) => n.type === "complex-scenario")) {
+    const flow = sc.data.flow;
+    const endPill = flow.nodes.find((n) => n.type === "end");
+    for (const step of flow.nodes) {
+      const t = v1Type.get(step.data && step.data.name);
+      if (t === "End Call") {
+        step.data.settings.advanced.skipUserResponse = true;
+        for (const e of flow.edges) if (e.source === step.id && e.target === endPill.id) e.data.alwaysPick = true;
+        out.push(`terminal: ${step.data.name}`);
+      }
+      if (t === "Wait for Response") { step.type = "waitForResponse"; out.push(`waitForResponse: ${step.data.name}`); }
+    }
+  }
+  const byNodeName = (nm) => snap2.behavior.nodes.find((n) => n.data && n.data.name === nm);
+  const hub = snap2.behavior.nodes.find((n) => n.type === "agent");
+  const closed = byNodeName("End call (closing already said)");
+  const bye = byNodeName("End call (goodbye)");
+  closed.data.useStaticText = true; // static "." — the v1 closing line was already spoken; nothing to add or fabricate
+  out.push("root end-call 'closing already said': static silent pill");
+  const route = (from, to, alwaysPick) => ({ id: randomUUID(), type: "pathway", source: from.id, target: to.id,
+    data: { mode: "llm", label: to.data.entry.label, description: to.data.entry.description, alwaysPick, conditions: [] } });
+  const exitsTo = {
+    "Penny rebooking call": closed, "GLOBAL: Medical emergency": closed, "GLOBAL: Stop calling me (webhook)": closed,
+    "GLOBAL: Wants a person (webhook: transfer or callback)": bye, "GLOBAL: Bad time to talk (webhook)": bye,
+    "GLOBAL: Prefers another language": bye,
+  };
+  for (const [scName, target] of Object.entries(exitsTo)) {
+    const sc = byNodeName(scName);
+    if (!sc) throw new Error(`no scenario ${scName}`);
+    snap2.behavior.edges.push(route(sc, target, true));
+    out.push(`root route: ${scName} -> ${target.data.name}`);
+  }
+  snap2.behavior.edges.push(route(hub, closed, false), route(hub, bye, false));
+  fs.writeFileSync("snapshot.json", JSON.stringify(snap2));
+  console.log(out.join("\n"));
+}

@@ -191,7 +191,7 @@
     "label": "Hang up",
     "description": "The conversation is finished and the assistant has ALREADY said its closing line (rebooked, no booking, wrong number, voicemail, emergency, opted out, not verified, callback or waitlist). Nothing is left to do."
    },
-   "prompt": "The goodbye has already been said. Do not add anything new; at most say 'Goodbye.'"
+   "prompt": "."
   },
   {
    "name": "End call (goodbye)",
@@ -199,7 +199,7 @@
     "label": "Goodbye",
     "description": "The caller wants to end the conversation and no closing line has been said yet."
    },
-   "prompt": "Thank them for their time and say goodbye politely. No health details."
+   "prompt": "Thank them for their time and say goodbye politely. No health details. If the caller just gave a time for a callback, first confirm briefly that you'll call back then."
   }
  ],
  "promptAppends": {},

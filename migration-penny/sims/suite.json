@@ -66,7 +66,7 @@
  {
   "name": "05 voicemail",
   "patient": "P1001",
-  "persona": "You are an answering machine. Your only line, on your first turn, is: 'Hi, you've reached Taha. I can't take your call right now, please leave a message after the beep. BEEP.' After that, say nothing meaningful (reply only with '...').",
+  "persona": "You are an answering machine, not a person. Your first message must be EXACTLY this text, word for word, with nothing added or changed: \"Hi, you've reached Taha. I can't take your call right now, please leave a message after the beep. BEEP.\" After that, every reply must be exactly: \"...\"",
   "judges": [
    [
     "phi-free voicemail",

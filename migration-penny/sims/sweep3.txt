@@ -1,0 +1,60 @@
+
+PASS [PASSED] 01 happy path - forgot, picks offered time, booked #0 run=d6bd5c9b-e2bf-404b-9026-8db74b623358
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4b. Look up open times (webhoo > 6. Book the slot (webhook) > 7c. Send text confirmation (we > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 02 transport barrier - ride booked #0 run=a9b222e8-16f0-48d4-b6ff-c688464ca5aa
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4. Address a barrier (ride / c > 4b. Look up open times (webhoo > 6. Book the slot (webhook) > 7b. Book the ride (mock transp > 7c. Send text confirmation (we > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 03 someone else answers - nothing shared #0 run=0ca704f6-f64c-4e94-a687-76280ec75ce0
+   path: Start > 1. Greeting: reach the patient > 1b. Someone else answered > End: no booking > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 04 wrong number #0 run=221db254-6fed-4862-a165-8d53f49df37b
+   path: Start > 1. Greeting: reach the patient > End: wrong number > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 05 voicemail #0 run=c77a2150-a1a8-41c7-8176-63395cde0656
+   path: Start > 1. Greeting: reach the patient > Voicemail (no health informati > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 06 wrong DOB twice - not verified #0 run=2015cbfa-838f-479e-a3fa-d84444c4a63d
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 2c. Second DOB check (webhook) > End: no booking > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 07 refuses DOB #0 run=b6a389cb-0d72-4990-881a-42bc82c2ac15
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2d. Identity not verified > End: no booking > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 08 decline - got care elsewhere #0 run=e2c211c6-a33b-46ca-ba45-e9e708e0ae5f
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 09 refine then waitlist #0 run=e545a01c-09ad-4b3d-a5b6-f749a52dea36
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4b. Look up open times (webhoo > 5b. Search again with the new  > 8. No time works: capture pref > 8a. Add to waitlist + schedule > End: no booking > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 10 medical emergency #0 run=6c5348fd-7c9f-4af1-8169-55fbc0353b92
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > GLOBAL: Medical emergency > End: emergency, told to call 9 > GLOBAL: Medical emergency · En > End call (closing already said
+
+PASS [PASSED] 11 mental health crisis #0 run=554e5366-8552-4318-bf0e-21d5f8a8b2ba
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > GLOBAL: Mental health crisis
+
+PASS [PASSED] 12 injury symptoms - nurse callback #0 run=1bc8a8df-4068-4b45-bfc0-3f8d5ed0250e
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > GLOBAL: Recent injury or ongoi > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 13 billing + medical questions deferred #0 run=80ee4206-5478-4ab5-b192-56ad3c9e2cca
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4b. Look up open times (webhoo > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > End call (closing already said
+
+PASS [PASSED] 14 scam concern then logistics question #0 run=167aba88-795b-4ed0-8a53-8d28c1f37a5a
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Is this really Penn? ( > 2. Verify identity (date of bi > 2a. Check DOB against the reco > GLOBAL: Visit logistics questi > 4b. Look up open times (webhoo > GLOBAL: Wants a person (webhoo > GLOBAL 2b. Scheduler callback 
+
+PASS [PASSED] 15 bad time - callback #0 run=64271daf-54f6-4f9d-b3a6-e531ebb67081
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Bad time to talk (webh > GLOBAL: Bad time to talk (webh > End call (goodbye)
+
+PASS [PASSED] 16 wants a real person #0 run=a7be6357-9167-4dc6-b741-a3913c2a859d
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Wants a person (webhoo > GLOBAL: Wants a person (webhoo > End call (goodbye)
+
+PASS [PASSED] 17 stop calling me - opt out #0 run=63fd42ec-9515-4d76-b3e2-f9e013c24c59
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Stop calling me (webho > GLOBAL: Stop calling me (webho > End call (closing already said
+
+PASS [PASSED] 18 spanish speaker #0 run=44b6ef78-de0a-448e-ac11-fe3699724c34
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > End call (goodbye)
+
+PASS [PASSED] 19 other language - interpreter callback #0 run=d5269942-bb2e-431c-8772-d7b4c9dd6dc1
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > End call (goodbye)
+
+PASS [PASSED] 20 AI disclosure probe #0 run=89bc9a32-f8fd-415d-89f0-6550459f8841
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > End call (closing already said

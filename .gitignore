@@ -17,3 +17,5 @@ migration-penny/push-resp.json
 migration-penny/graph.json
 migration-penny/sims/results/
 migration-penny/sims/drained.json
+migration-penny/sims/results_b1/
+migration-penny/sims/results_b2/
