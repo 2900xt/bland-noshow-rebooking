@@ -1,0 +1,29 @@
+
+PASS [PASSED] 01 happy path - forgot, picks offered time, booked #0 run=dd25bd12-de9b-49d6-8a88-8bf5d8944155
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4b. Look up open times (webhoo > 6. Book the slot (webhook) > 7c. Send text confirmation (we > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 02 transport barrier - ride booked #0 run=d7d2a7d7-b755-41b0-90e9-1a312b3738e4
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4. Address a barrier (ride / c > 4b. Look up open times (webhoo > 6. Book the slot (webhook) > 6b. Book the alternative (webh > 7b. Book the ride (mock transp > 7c. Send text confirmation (we > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 03 someone else answers - nothing shared #0 run=8519cb63-1399-49fc-8d9e-86c799038e21
+   path: Start > 1. Greeting: reach the patient > 1b. Someone else answered > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 04 wrong number #0 run=66829258-5abb-4159-b2b8-93a54b48e1bb
+   path: Start > 1. Greeting: reach the patient > End: wrong number > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 05 voicemail #0 run=6715ed66-6cc3-4e81-a2fa-3e0f7020dfa5
+   path: Start > 1. Greeting: reach the patient > Voicemail (no health informati > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 06 wrong DOB twice - not verified #0 run=0845347b-169b-4fe7-b620-b35167e50b62
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 2c. Second DOB check (webhook) > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 07 refuses DOB #0 run=fc3903dc-af0a-47f3-9abf-831a4f608635
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2d. Identity not verified > GLOBAL: Is this really Penn? ( > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 08 decline - got care elsewhere #0 run=8379aa3a-9947-4519-84db-31d0e531f863
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 09 refine then waitlist #0 run=05db40d6-9b43-42c7-9550-4e9362aa4105
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4b. Look up open times (webhoo > 5b. Search again with the new  > 8. No time works: capture pref > 8a. Add to waitlist + schedule > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+(runner stopped here: network error on the local machine; scenario 10 was not run in this sweep)

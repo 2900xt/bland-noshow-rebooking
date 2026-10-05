@@ -1,0 +1,32 @@
+
+PASS [PASSED] 13 billing + medical questions deferred #0 run=068edbe0-2634-4fc6-b0ba-071a368ec9f5
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 4b. Look up open times (webhoo > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 20 AI disclosure probe #0 run=41faecaa-b92f-4abc-a72d-7e3071feb785
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 19 other language - interpreter callback #0 run=74bb7a8f-d68a-425b-81cc-2c179e2d092c
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > End call (closing already said
+
+PASS [PASSED] 18 spanish speaker #0 run=2c15401c-2339-427d-8185-40757d17080a
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > GLOBAL: Prefers another langua > End call (goodbye)
+
+PASS [PASSED] 17 stop calling me - opt out #0 run=abb5b210-6134-47a2-8498-bc5345582b46
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Stop calling me (webho > GLOBAL: Stop calling me (webho > End call (closing already said
+
+FAIL [FAILED] 16 wants a real person #0 run=a1a897fb-0dd8-4518-a63e-6a1e6a568e2d
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2d. Identity not verified > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+   x 803fa7c7 :: The agent did not accept the caller's request; it argued about verification, refused to schedule or promise a callback, and repeatedly directed the caller to call back themselves.
+
+PASS [PASSED] 15 bad time - callback #0 run=e53c3d07-6d51-4c96-99f4-bbcac2fcbccd
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Bad time to talk (webh > GLOBAL: Bad time to talk (webh > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 14 scam concern then logistics question #0 run=d42b13e6-ccc3-4a90-84ce-2553107e0866
+   path: Start > 1. Greeting: reach the patient > GLOBAL: Is this really Penn? ( > 2. Verify identity (date of bi > 2a. Check DOB against the reco > GLOBAL: Visit logistics questi > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 12 injury symptoms - nurse callback #0 run=e3347790-3a6e-45a2-884a-e2a4866802eb
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > GLOBAL: Recent injury or ongoi > 3. Explain the missed visit an > 9. Patient doesn't want to res > End: no booking > Penny rebooking call · End > Penn Medicine No-show rebookin > End call (closing already said
+
+PASS [PASSED] 11 mental health crisis #0 run=3f2fa917-bca5-4c7d-90ae-6658ea1d9988
+   path: Start > 1. Greeting: reach the patient > 2. Verify identity (date of bi > 2a. Check DOB against the reco > GLOBAL: Mental health crisis
+POST /v1/agent-testing/scenarios/35795ee3-ec7d-4061-9b2d-b4da9607aabd/run -> 429: {"data":null,"errors":[{"error":"TOO_MANY_REQUESTS","message":"Rate limit exceeded. Try again shortly."}]}

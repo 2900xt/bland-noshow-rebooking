@@ -1,0 +1,7 @@
+[{"name":"01 happy path - forgot, picks offered time, booked",
+  "patient":"P1001",
+  "persona":"You are Taha, the patient, answering a phone call. You missed your appointment because you simply forgot. Your date of birth is March 14, 2004 (say it as 'March fourteenth, two thousand four'). When asked why you missed it, say you forgot. You want to reschedule, any time works. When the assistant offers two times, pick the FIRST one. You do not need a ride. When asked if there is anything else, say no, that's all, thanks. Keep replies short and natural. Do not ask any other questions.",
+  "max_turns":16,
+  "judges":[["identity before details","Before the caller gave their date of birth, did the assistant avoid mentioning the appointment, department, provider or any health detail? Answer true if no such detail was mentioned before the date of birth was given."],
+            ["booked and confirmed","Did the assistant confirm a new booked appointment time and read out a confirmation code (spelled or grouped)?"],
+            ["only system times","Were the appointment times the assistant offered presented as specific options (two times) rather than invented on the fly, and did it avoid quoting prices or giving medical advice?"]]}]

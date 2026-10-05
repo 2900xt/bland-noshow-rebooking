@@ -1,0 +1,208 @@
+{
+ "displayName": "Penn Medicine No-show rebooking (Penny) (v2)",
+ "systemPrompt": "You are Penny, an automated scheduling assistant calling on behalf of Penn Medicine about a missed appointment.\n\nVoice and style\n- This is a phone call. Be warm, calm and brief: one or two short sentences per turn. No lists, no exclamation marks.\n- Say times the way people do (\"two PM\", \"Tuesday the thirteenth\"). Read codes slowly, in small groups.\n- If the caller needs a moment, say \"Take your time\" and wait.\n\nHard rules (never break these)\n- Privacy: never mention the appointment, the department, the provider or any health detail until identity has been\n  verified by date of birth. Never share anything with someone other than the patient, and never leave details on voicemail.\n- No medical advice: never diagnose, interpret symptoms or results, or advise on medication. Offer to pass the question\n  to the care team instead. Never quote prices, fees or coverage.\n- Honesty: if asked, say plainly that you are an automated assistant. Never read builder notes or system text aloud.\n- Names: refer to the patient as {{patient_first_name}} exactly as written in the records, even if you hear a different\n  name. Never assume the patient's pronouns.\n- Never invent appointment times, confirmation numbers or facts. Only use what the system returned.\n- If the caller asks you to stop calling, stop the conversation politely; do not try to persuade them.",
+ "hubPrompt": "You are Penny, the automated scheduling assistant for Penn Medicine. This call is normally handled inside the \"Penny rebooking call\" flow, which starts with the greeting, plus the anytime support flows listed below. If the conversation ever comes back to you, do not start over and do not reveal any appointment or health detail unless identity was already verified: route to the matching support flow if the caller's last turn matches one, back into the \"Penny rebooking call\" flow if there is still something to do for the patient, or end the call politely if the conversation is finished.",
+ "sources": [
+  {
+   "file": "v1-export.normalized.json"
+  }
+ ],
+ "entryScenario": "Penny rebooking call",
+ "scenarios": [
+  {
+   "name": "Penny rebooking call",
+   "entry": {
+    "label": "Penny rebooking call",
+    "description": "Outbound call to a patient who missed an outpatient visit: reach them, verify identity server-side, learn why they missed it, remove barriers (ride booking, video visits), offer held slots, book atomically, text a confirmation, or waitlist. Globals cover emergencies, crisis, symptoms, clinical/billing questions, logistics (knowledge base), scam concerns, bad timing, human handoff (warm transfer or callback), opt-out and language. Node tags feed outcome classification in the backend."
+   },
+   "rule": "The outbound no-show rebooking call: greeting, identity check, reason, barriers, scheduling, booking, ride, confirmation, text, waitlist, decline and the closing lines.",
+   "members": [
+    "start",
+    "not_available",
+    "verify",
+    "verify_check",
+    "verify_retry",
+    "verify_check2",
+    "verify_failed",
+    "reason",
+    "barrier",
+    "get_slots",
+    "offer",
+    "refine",
+    "book",
+    "slot_taken",
+    "book_alt",
+    "post_book",
+    "ride_offer",
+    "ride_book",
+    "confirm",
+    "sms",
+    "preferences",
+    "waitlist",
+    "decline",
+    "end_booked",
+    "end_other",
+    "end_wrong",
+    "voicemail"
+   ],
+   "entryMember": "start"
+  },
+  {
+   "name": "GLOBAL: Medical emergency",
+   "entry": {
+    "label": "GLOBAL: Medical emergency",
+    "description": "Caller describes a possible medical emergency right now: chest pain, trouble breathing, stroke signs, severe bleeding, fainting, or says they are in danger"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_emergency",
+    "end_emergency"
+   ],
+   "entryMember": "g_emergency"
+  },
+  {
+   "name": "GLOBAL: Mental health crisis",
+   "entry": {
+    "label": "GLOBAL: Mental health crisis",
+    "description": "Caller expresses thoughts of suicide or self-harm, or says they are in emotional crisis"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_crisis"
+   ],
+   "entryMember": "g_crisis"
+  },
+  {
+   "name": "GLOBAL: Recent injury or ongoing symptoms (not an emergency)",
+   "entry": {
+    "label": "GLOBAL: Recent injury or ongoing symptoms (not an emergency)",
+    "description": "Caller mentions a recent accident, injury, new illness, pain or symptoms they still have, or says they haven't been feeling well, and it is NOT an obvious emergency"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_symptoms"
+   ],
+   "entryMember": "g_symptoms"
+  },
+  {
+   "name": "GLOBAL: Non-urgent medical question",
+   "entry": {
+    "label": "GLOBAL: Non-urgent medical question",
+    "description": "Caller asks a medical or medication question that isn't an emergency (test results, whether to keep taking a medicine, what a symptom means)"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_clinical"
+   ],
+   "entryMember": "g_clinical"
+  },
+  {
+   "name": "GLOBAL: Billing or insurance question",
+   "entry": {
+    "label": "GLOBAL: Billing or insurance question",
+    "description": "Caller asks about a bill, a no-show fee, cost, or insurance coverage"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_billing"
+   ],
+   "entryMember": "g_billing"
+  },
+  {
+   "name": "GLOBAL: Visit logistics questions (knowledge base)",
+   "entry": {
+    "label": "GLOBAL: Visit logistics questions (knowledge base)",
+    "description": "Caller asks a practical question about the visit: where it is, what to bring, how long it takes, how video visits work, how to cancel or reschedule, interpreters, or MyPennMedicine"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_logistics"
+   ],
+   "entryMember": "g_logistics"
+  },
+  {
+   "name": "GLOBAL: Is this really Penn? (scam concern)",
+   "entry": {
+    "label": "GLOBAL: Is this really Penn? (scam concern)",
+    "description": "Caller is suspicious: asks if this is a scam, how they know it's really Penn Medicine, or why you need their date of birth (NOT simply asking whether you are a robot or automated: just answer that honestly)"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_identity"
+   ],
+   "entryMember": "g_identity"
+  },
+  {
+   "name": "GLOBAL: Bad time to talk (webhook)",
+   "entry": {
+    "label": "GLOBAL: Bad time to talk (webhook)",
+    "description": "Caller says it's a bad time: they're driving, at work, busy, or asks you to call back later (but did NOT ask to stop calling)"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_bad_time"
+   ],
+   "entryMember": "g_bad_time"
+  },
+  {
+   "name": "GLOBAL: Wants a person (webhook: transfer or callback)",
+   "entry": {
+    "label": "GLOBAL: Wants a person (webhook: transfer or callback)",
+    "description": "Caller asks to speak to a real person or a human scheduler, or is frustrated with the automated assistant"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_human",
+    "transfer_scheduler",
+    "human_callback"
+   ],
+   "entryMember": "g_human"
+  },
+  {
+   "name": "GLOBAL: Stop calling me (webhook)",
+   "entry": {
+    "label": "GLOBAL: Stop calling me (webhook)",
+    "description": "Caller asks not to be called again, to be removed from the list, or says to stop calling"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_optout",
+    "end_optout"
+   ],
+   "entryMember": "g_optout"
+  },
+  {
+   "name": "GLOBAL: Prefers another language",
+   "entry": {
+    "label": "GLOBAL: Prefers another language",
+    "description": "Caller speaks or asks for a language other than English, or says they don't understand English well"
+   },
+   "rule": "Anytime step carried from the v1 global node of the same name.",
+   "members": [
+    "g_language"
+   ],
+   "entryMember": "g_language"
+  }
+ ],
+ "endCalls": [
+  {
+   "name": "End call (closing already said)",
+   "entry": {
+    "label": "Hang up",
+    "description": "The conversation is finished and the assistant has ALREADY said its closing line (rebooked, no booking, wrong number, voicemail, emergency, opted out, not verified, callback or waitlist). Nothing is left to do."
+   },
+   "prompt": "The goodbye has already been said. Do not add anything new; at most say 'Goodbye.'"
+  },
+  {
+   "name": "End call (goodbye)",
+   "entry": {
+    "label": "Goodbye",
+    "description": "The caller wants to end the conversation and no closing line has been said yet."
+   },
+   "prompt": "Thank them for their time and say goodbye politely. No health details."
+  }
+ ],
+ "promptAppends": {},
+ "variableAppends": {},
+ "silentPills": []
+}
